@@ -23,11 +23,11 @@
 }
 *{box-sizing:border-box}
 ::selection{
-  background:#A80030;
+  background:#E62E6B;
   color:#fff;
 }
 ::-moz-selection{
-  background:#ce0056;
+  background:#E62E6B;
   color:#fff;
 }
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
@@ -50,6 +50,7 @@ header{
   max-width:1180px;margin:0 auto;padding:23px 30px;
   display:flex;align-items:center;justify-content:space-between;
 }
+.brand{display:flex;align-items:center;gap:11px;font-size:11px;font-weight:700;letter-spacing:.19em}
 .brand-mark{width:44px;height:12px;display:flex;gap:2px}
 .brand-mark::before{content:"";display:block;width:12px;height:12px;border-radius:50%;
   background:var(--red);box-shadow:16px 0 0 var(--yellow),32px 0 0 var(--green)}
@@ -102,7 +103,7 @@ h1{
 }
 .featured-quote.switching{opacity:0}
 .featured-footer{
-  margin-top:26px;display:flex;align-items:center;justify-content:space-between;gap:16px;
+  margin-top:26px;display:flex;align-items:center;justify-content:flex-start;gap:16px;
   position:relative;z-index:2;
 }
 .featured-btn{
@@ -111,16 +112,6 @@ h1{
   transition:background .18s ease;
 }
 .featured-btn:hover{background:#3a3b3d}
-.featured-dots{
-  display:flex;align-items:center;gap:8px;
-}
-.featured-dot{
-  width:7px;height:7px;padding:0;border-radius:999px;border:0;
-  background:var(--line-dark);cursor:pointer;
-  transition:width .24s ease, background .24s ease;
-}
-.featured-dot:hover{background:#8e908b}
-.featured-dot.active{width:22px;background:var(--ink)}
 
 /* ---------- sections ---------- */
 .section{max-width:1180px;margin:70px auto 0;padding:0 30px}
@@ -268,7 +259,6 @@ h1{
       </div>
       <div class="featured-footer">
         <button class="featured-btn" id="featuredBtn" type="button">查看篇目</button>
-        <div class="featured-dots" id="featuredDots" aria-label="切换推荐诗集"></div>
       </div>
     </div>
   </section>
@@ -307,10 +297,52 @@ h1{
 </div>
 
 <script>
-/* =====================================================================
-   数据 —— 由 诗集.md 逐字整理
-   "/标题" 为诗题，"——诗集名" 表示其上诸篇属于该诗集
-   ===================================================================== */
+// 1. 保留你原有的诗集数据数组（确保变量名与下方对应，若原变量名不同请替换 FEATURED_LIST）
+const FEATURED_LIST = [
+  { title: "《她》", quote: "“世界依旧透明。”", collection: "她" },
+  { title: "《雨季》", quote: "“檐角的声音比夜更长。”", collection: "雨季" },
+  { title: "《橙与冰》", quote: "“在融化之前保持明亮。”", collection: "橙与冰" }
+];
+
+let featuredIdx = 0;
+const featuredQuoteEl = document.getElementById("featuredQuote");
+const featuredContentEl = document.getElementById("featuredContent");
+const featuredTitleEl = document.getElementById("featuredTitle");
+const featuredBtnEl = document.getElementById("featuredBtn");
+
+function renderFeatured(index) {
+  const item = FEATURED_LIST[index];
+  if (!item) return;
+  featuredTitleEl.textContent = item.title;
+  featuredQuoteEl.textContent = item.quote;
+  featuredBtnEl.onclick = () => {
+    // 联动原有筛选逻辑：若原代码有 selectCollection(item.collection) 可在此调用
+    const targetChip = Array.from(document.querySelectorAll(".collection"))
+      .find(el => el.textContent.includes(item.collection));
+    if (targetChip) targetChip.click();
+    document.getElementById("poems").scrollIntoView({ behavior: "smooth" });
+  };
+}
+
+function nextFeatured() {
+  if (FEATURED_LIST.length <= 1) return;
+  featuredQuoteEl.classList.add("switching");
+  featuredContentEl.classList.add("switching");
+  setTimeout(() => {
+    featuredIdx = (featuredIdx + 1) % FEATURED_LIST.length;
+    renderFeatured(featuredIdx);
+    featuredQuoteEl.classList.remove("switching");
+    featuredContentEl.classList.remove("switching");
+  }, 280);
+}
+
+renderFeatured(0);
+setInterval(nextFeatured, 4000);
+</script>
+</body>
+</html>
+<script>
+
 const collections = [
   {
     name: "她", file: "她.md",
