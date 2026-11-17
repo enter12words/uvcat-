@@ -1,0 +1,1784 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f7f6f2">
+<title>诗集</title>
+<style>
+:root{
+  --bg:#f7f6f2;
+  --paper:#f5f1e9;
+  --paper-line:#e6e2d8;
+  --surface:#ffffff;
+  --ink:#202124;
+  --muted:#6f706d;
+  --line:#deddd7;
+  --line-dark:#c8c7c1;
+  --red:#ea4335;
+  --yellow:#fbbc05;
+  --green:#34a853;
+  --shadow:0 16px 44px rgba(32,33,36,.09);
+  --serif:"Noto Serif SC","Songti SC","STSong",serif;
+}
+*{box-sizing:border-box}
+::selection{
+  background:#A80030;
+  color:#fff;
+}
+::-moz-selection{
+  background:#A80030;
+  color:#fff;
+}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  margin:0;color:var(--ink);background:var(--bg);min-height:100vh;
+  font-family:ui-sans-serif,-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+}
+body.reader-open{overflow:hidden}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;opacity:.055;z-index:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E");
+}
+button,input{font:inherit}
+button{color:inherit}
+header,main{position:relative;z-index:1}
+
+/* ---------- header ---------- */
+header{
+  max-width:1180px;margin:0 auto;padding:23px 30px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.brand{display:flex;align-items:center;gap:11px;font-size:11px;font-weight:700;letter-spacing:.19em}
+.brand-mark{width:28px;height:8px;display:flex;gap:2px}
+.brand-mark::before{content:"";display:block;width:8px;height:8px;border-radius:50%;
+  background:var(--red);box-shadow:10px 0 0 var(--yellow),20px 0 0 var(--green)}
+nav{display:flex;gap:22px;font-size:12px}
+nav a{color:#5f6368;text-decoration:none}
+nav a:hover{color:var(--ink)}
+
+/* ---------- hero ---------- */
+.hero{
+  max-width:1180px;margin:0 auto;padding:64px 30px 46px;
+}
+.eyebrow{color:#73756f;font-size:10px;letter-spacing:.25em;text-transform:uppercase;margin-bottom:16px}
+h1{
+  font-family:var(--serif);font-weight:500;
+  font-size:clamp(80px,12vw,150px);line-height:.8;margin:0;letter-spacing:-.07em;
+}
+.hero-sub{margin:26px 0 0;color:#5f6368;max-width:610px;line-height:2;font-size:14px;letter-spacing:.03em}
+
+/* ---------- featured ---------- */
+.featured{max-width:1180px;margin:0 auto;padding:0 30px}
+.featured-card{
+  position:relative;overflow:hidden;border:1px solid var(--line);border-radius:24px;
+  min-height:330px;padding:40px 44px;display:flex;flex-direction:column;justify-content:flex-end;
+  background:var(--surface);box-shadow:var(--shadow);
+}
+.featured-card::before{
+  content:"";position:absolute;right:50px;top:40px;width:230px;height:230px;border-radius:50%;
+  border:1px solid rgba(234,67,53,.22);
+  box-shadow:0 0 0 28px rgba(251,188,5,.07),0 0 0 58px rgba(52,168,83,.045);
+}
+.featured-card::after{
+  content:"";position:absolute;right:-100px;bottom:75px;width:520px;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(32,33,36,.16),transparent);transform:rotate(-18deg);
+}
+.featured-content{
+  transition:opacity .28s ease, transform .28s ease;
+}
+.featured-content.switching{
+  opacity:0;
+  transform:translateY(6px);
+}
+.featured-kicker{color:#6f706d;font-size:10px;letter-spacing:.2em;margin-bottom:13px}
+.featured-title{
+  font-family:var(--serif);font-size:clamp(42px,6vw,68px);font-weight:500;margin:0;letter-spacing:-.04em;
+}
+.featured-quote{
+  position:absolute;right:54px;top:53px;max-width:300px;color:#343633;text-align:right;
+  font-family:var(--serif);font-size:18px;line-height:1.9;
+  transition:opacity .28s ease;
+}
+.featured-quote.switching{opacity:0}
+.featured-footer{
+  margin-top:26px;display:flex;align-items:center;justify-content:space-between;gap:16px;
+  position:relative;z-index:2;
+}
+.featured-btn{
+  display:inline-flex;width:max-content;padding:9px 16px;border-radius:999px;
+  background:var(--ink);color:#fff;font-size:12px;border:0;cursor:pointer;
+  transition:background .18s ease;
+}
+.featured-btn:hover{background:#3a3b3d}
+.featured-dots{
+  display:flex;align-items:center;gap:8px;
+}
+.featured-dot{
+  width:7px;height:7px;padding:0;border-radius:999px;border:0;
+  background:var(--line-dark);cursor:pointer;
+  transition:width .24s ease, background .24s ease;
+}
+.featured-dot:hover{background:#8e908b}
+.featured-dot.active{width:22px;background:var(--ink)}
+
+/* ---------- sections ---------- */
+.section{max-width:1180px;margin:70px auto 0;padding:0 30px}
+.section-head{display:flex;justify-content:space-between;gap:20px;align-items:end;margin-bottom:18px}
+.section-title{font-family:var(--serif);font-size:30px;font-weight:500;margin:0}
+.section-copy{color:#777873;font-size:12px;line-height:1.8;max-width:410px;text-align:right}
+
+/* ---------- collection chips ---------- */
+.collections{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  padding:2px 2px 10px;
+}
+.collection{
+  flex:0 0 auto;display:inline-flex;align-items:center;gap:9px;white-space:nowrap;
+  background:var(--surface);border:1px solid var(--line);border-radius:999px;
+  padding:12px 22px;color:#63645f;cursor:pointer;
+  transition:background .16s ease,border-color .16s ease,color .16s ease,transform .16s ease;
+}
+.collection:hover{border-color:var(--line-dark);color:var(--ink);transform:translateY(-1px)}
+.collection.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+.collection.active .collection-count{opacity:.7}
+.collection-name{font-family:var(--serif);font-size:17px}
+.collection-count{font-size:11px;opacity:.55}
+
+/* ---------- toolbar ---------- */
+.toolbar{display:flex;gap:10px;align-items:center;margin:22px 0 18px}
+.search{flex:1;min-width:0}
+.search input{
+  width:100%;background:var(--surface);border:1px solid var(--line);outline:none;color:var(--ink);
+  border-radius:10px;padding:11px 13px;font-size:12.5px;
+}
+.search input::placeholder{color:#9a9b97}
+.search input:focus{border-color:#9d9e99;box-shadow:0 0 0 3px rgba(32,33,36,.05)}
+
+/* ---------- poem cards ---------- */
+.poems{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:20px}
+.poem-card{
+  appearance:none;border:1px solid var(--line);background:var(--surface);border-radius:8px;
+  padding:10px 11px 11px;text-align:left;cursor:pointer;color:inherit;
+  display:flex;flex-direction:column;gap:7px;
+  transition:background .15s ease,border-color .15s ease,transform .15s ease;
+}
+.poem-card:hover{background:#fbfbf9;border-color:var(--line-dark);transform:translateY(-1px)}
+.poem-card:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.poem-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.poem-title{font-family:var(--serif);font-size:14.5px;line-height:1.3}
+.poem-collection{font-size:9px;color:#9a9b96;flex:0 0 auto}
+.poem-excerpt{
+  font-family:var(--serif);font-size:11px;line-height:1.7;color:#6c6d68;margin:0;
+  display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;
+  white-space:pre-wrap;
+}
+.empty{
+  padding:55px 20px;text-align:center;color:#898a86;
+  border:1px dashed var(--line);border-radius:15px;grid-column:1/-1;font-size:13px;
+}
+
+/* ---------- reading page ---------- */
+.reading-page{
+  position:fixed;inset:0;z-index:100;
+  background:var(--paper);color:var(--ink);
+  display:none;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
+}
+.reading-page.show{display:block;animation:readerIn .22s ease}
+@keyframes readerIn{from{opacity:0}to{opacity:1}}
+.reading-top{
+  position:sticky;top:0;z-index:2;
+  display:flex;align-items:center;justify-content:flex-start;
+  padding:15px max(30px,calc((100% - 720px)/2));
+  background:rgba(245,241,233,.93);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--paper-line);
+}
+.reading-back{
+  border:1px solid #d9d4c7;background:transparent;border-radius:999px;
+  padding:7px 16px;color:#656661;font-size:11.5px;letter-spacing:.06em;cursor:pointer;
+  transition:color .16s ease,border-color .16s ease,background .16s ease;
+}
+.reading-back:hover{color:var(--ink);border-color:#bcb7a9;background:#fff}
+.reading-shell{width:min(720px,100%);margin:0 auto;padding:58px 30px 110px}
+.reader-collection{font-size:10px;letter-spacing:.18em;color:#8a8b87;margin-bottom:12px}
+.reader-title{
+  font-family:var(--serif);font-size:clamp(28px,5vw,40px);font-weight:500;
+  margin:0 0 34px;letter-spacing:-.02em;line-height:1.25;
+}
+.reader-poem{
+  font-family:var(--serif);font-size:18px;line-height:1.85;
+  white-space:pre-wrap;letter-spacing:.02em;word-break:break-word;
+}
+
+/* ---------- responsive ---------- */
+@media (max-width:900px){
+  .featured-quote{position:static;text-align:left;margin:0 0 24px}
+  .featured-card{min-height:310px}
+  .featured-card::before{right:-25px;top:-20px}
+  .section-copy{text-align:left}
+  .section-head{align-items:start;flex-direction:column}
+}
+@media (max-width:620px){
+  header{padding:19px 18px}
+  nav{display:none}
+  .hero,.featured,.section{padding-left:18px;padding-right:18px}
+  .hero{padding-top:44px}
+  h1{font-size:78px}
+  .hero-sub{font-size:13px}
+  .featured-card{padding:28px;min-height:300px;border-radius:20px}
+  .featured-quote{font-size:16px}
+  .featured-footer{flex-wrap:wrap}
+  .collection{padding:10px 18px}
+  .collection-name{font-size:15px}
+  .poems{grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:16px}
+  .poem-card{padding:9px 10px 10px}
+  .poem-title{font-size:13.5px}
+  .poem-excerpt{font-size:10.5px}
+  .section{margin-top:54px}
+  .reading-top{padding:12px 18px}
+  .reading-shell{padding:40px 20px 90px}
+  .reader-poem{font-size:16.5px;line-height:1.8}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand"><span class="brand-mark"></span><span>诗集</span></div>
+  <nav><a href="#collections">Collections</a><a href="#poems">Poems</a></nav>
+</header>
+
+<main>
+  <section class="hero">
+    <div>
+      <div class="eyebrow">诗集</div>
+      <h1>她</h1>
+      <p class="hero-sub">Rain, spring, night, orange, ice, and light.</p>
+    </div>
+  </section>
+
+  <section class="featured">
+    <div class="featured-card" id="featuredCard">
+      <div class="featured-quote" id="featuredQuote">“世界依旧透明。”</div>
+      <div class="featured-content" id="featuredContent">
+        <div class="featured-kicker">THE FEATURED BOOK</div>
+        <h2 class="featured-title" id="featuredTitle">《她》</h2>
+      </div>
+      <div class="featured-footer">
+        <button class="featured-btn" id="featuredBtn" type="button">查看篇目</button>
+        <div class="featured-dots" id="featuredDots" aria-label="切换推荐诗集"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="collections">
+    <div class="section-head">
+      <div><div class="eyebrow">COLLECTIONS</div><h2 class="section-title">诗集</h2></div>
+      <div class="section-copy">Select a collection to filter.</div>
+    </div>
+    <div class="collections" id="collectionGrid"></div>
+  </section>
+
+  <section class="section" id="poems">
+    <div class="section-head">
+      <div><div class="eyebrow">POEMS</div><h2 class="section-title" id="poemHeading">全部诗篇</h2></div>
+      <div class="section-copy" id="resultInfo"></div>
+    </div>
+    <div class="toolbar">
+      <div class="search">
+        <input id="searchInput" placeholder="搜索诗名或诗句……" autocomplete="off" aria-label="搜索诗名或诗句">
+      </div>
+    </div>
+    <div class="poems" id="poemGrid"></div>
+  </section>
+</main>
+
+<div class="reading-page" id="readingPage" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="reading-top">
+    <button class="reading-back" id="readerBack" type="button">Back</button>
+  </div>
+  <div class="reading-shell">
+    <div class="reader-collection" id="readerCollection"></div>
+    <h2 class="reader-title" id="readerTitle"></h2>
+    <div class="reader-poem" id="readerPoem"></div>
+  </div>
+</div>
+
+<script>
+/* =====================================================================
+   数据 —— 由 诗集.md 逐字整理
+   "/标题" 为诗题，"——诗集名" 表示其上诸篇属于该诗集
+   ===================================================================== */
+const collections = [
+  {
+    name: "她", file: "她.md",
+    quote: "“连绵的雨，长久的爱。”",
+    poems: [
+      { title: "纯化", text:
+`我最害怕的
+在深冷静寂的夏天的
+一个潮湿的夜晚
+
+空荡的外面有着
+人类的寂寞的灯。
+
+夜莺，
+萤火虫，
+自然，
+夜幕下的树，
+
+像电影一样，
+像爱的话语一样短暂，
+
+像今天的心混乱，
+像不眠的此刻，
+
+像中国的一切一切困境，
+
+抛开这些，
+我还是爱你，
+
+抛开你的过往和未来的未来，
+抛开你的一切实在的幻想的特征，
+抛开夏天调过的酒，
+下午和晚上没完没了的彩色。
+
+我还是爱你，
+无论在漫长混乱的梦里，
+更为漫长和混乱的现实，
+在整个世界为你停留的时候，
+在你的面前。
+在无人在意的诗里。
+
+我在等着你的
+救赎，
+或是我先救赎这个时代。
+
+我的信仰，
+从来不被这个时代认可，
+崇高而纯洁的信仰，
+就像那天下午照在你身上温馨，美好，橙色的光。`},
+      { title: "滑动", text:
+`灼热，
+冰块，
+时间熔化了，
+橙色的白。
+
+纯净的月光，
+就像
+就像
+橙子切面的
+鲜红。
+
+几十亿年，
+活物早已见怪不怪
+充盈的射线，
+在一颗鲜红的心上滑动。
+一整束色彩晒出的伤痕，
+刻在木星上。
+
+只需要点开，
+整个宇宙为你选择的，
+悲伤不已。
+你的，
+你的。
+你说，
+要有光。
+
+你的一切如此特殊，
+全世界都知道。
+太阳深处，
+你的体温。`},
+      { title: "贴", text:
+`我和你的距离如此遥远，
+台风紧贴着。`},
+      { title: "空心", text:
+`一个秋天无比漫长，
+叶，鲜艳的橙色。
+太阳，带着九百束温柔善良的光。
+
+她，眼中新鲜，炽热的情欲，
+刺痛着多么现代，科学，理性的，
+空心。
+
+秋天的树，摇动着鲜红，沙沙的火焰，
+她就站在粟的狗的尾巴中间，
+神秘得像引力的笑，
+一下子，水星，金星，木星无比失控。
+
+她轻轻地吃掉。
+娇小的她，
+她眼里深远，
+热闹的宇宙。
+她如此平等地给了一切的人，
+生命。`},
+      { title: "灵气", text:
+`我和你的距离如此之远，
+从星云和尘埃的一次呼吸，
+到引力温暖寂静的拥抱。
+从氧化的悲剧，
+到软乎乎的狸花。
+
+夏天橙色的暧昧的光，
+像银白的冰水。
+橙色的，暧昧的，
+你的脸。
+
+夜晚轻得不会下坠的风，
+只是你的口红。
+九州万千灵气构成了你的肤质，
+你娇媚的眼神，温柔的泪水，
+引得反粒子一度跑到此岸。`},
+      { title: "夜晚", text:
+`夜晚在流动。
+台风呼出的湿气化作雨滴，在窗上，树上，在湍急的溪流里。
+丝绸一样流动着。
+
+夜幕，
+像葡萄一样紫色的夜晚，像蓝莓一样黑色的同样也是夜晚。
+雨水在夜里闪着水晶的光。
+水洼看上去是银色的金属。
+灯光像白色的油漆涂在地上。
+
+透明的液滴在夏天的温柔中轻盈地飘，
+旋转，
+滴落到你小小的手心。
+连绵的雨，
+长久的爱。`},
+      { title: "倾心", text:
+`你的温柔与世俗不同，
+整个世界为你倾心，
+
+爱过你的人都知道，
+风揉着你的肩，
+雨拉着你，
+流动的夜晚被你轻轻地抱着。
+
+月光是难言的痛，
+是融化的清冷。
+
+每个人都爱你，
+无一例外。
+
+你的温柔带着一种色彩，
+还没有人描述过。`},
+      { title: "血", text:
+`连续漫长的炎热，
+迷幻长久地等待，
+迷幻得像夜晚紫黑色的湖水，
+玻璃陶瓷纯白如空气的声音，
+灰尘的歌唱。
+
+痛，疲倦与困惑，我的，
+秋天的雨痛在冰冷麻木的心上，鲜红的热烈的。
+
+在纯净无暇的湖，生生不息的流体，
+像纯白的早晨，像漫天的雪一样白的水花。
+
+迷幻的高温，
+橙色的阳光漂白了大地，灰尘，
+错乱的反射。
+不无困惑地站在树上，
+树上时飞时停。
+
+从空气和暧昧的气氛，
+一直错到了你柔软的漂亮的长发。
+连绵的玻璃上的雾，秋雨。
+爱，娇媚的雨滴融进秋天的湖。
+太阳平淡地放射出九十亿道热烈的纯白的射线。
+她平等地赐予每一个人，
+生命。
+不仅如此，温情。
+
+湖面上跳动的沉痛的弦，
+是世界唯一的解释。`}
+    ]
+  },
+  {
+    name: "心", file: "心.md",
+    quote: "“你融化过冰河时代无边无际的白。”",
+    poems: [
+      { title: "心", text:
+`痛苦和一切的痛苦，幸福之间，
+对我来说没有差别。
+我爱着你的深刻，决绝，
+你不同于现实的高尚，
+热烈，
+无边无际，
+就像春天的碎花，
+一个下午就把世界染成她的，
+橙色。
+
+我需要的信仰，
+长久没有感受过的激动，心跳，
+都在你的怀里。
+
+春天的下午，
+雨水牵着你的手。
+
+春天的，
+温热。
+松鼠爬上树梢，
+花丛淡粉色，蓝色和白色。
+麻雀，斑鸠悲伤地时飞时停，
+啄食。
+水洼对着明净又多彩的天空。
+
+你融化过冰河时代无边无际的，
+白。
+我爱你的美和直接。
+你最微小的优点，
+脸的柔和动人，
+随手写下的话。
+无一例外，我都爱过。`},
+      { title: "热", text:
+`炽热的阳光
+洒向
+无处不在的灼热的冰块，`},
+      { title: "雨", text:
+`暴雨如注，
+除了你以外，
+一切潮湿又冷，
+就像开水从地铁下坠，
+直到下个站点，
+玻璃幕墙和
+人们最爱的
+笑颜。
+
+今天的雨，
+天涯共此时，
+水和月光，
+不分彼此，
+今天下雨了，
+漂亮的雨，
+似乎把一切都打乱。
+
+一整个夏天的橙色和浸泡在，
+你的温柔善良，
+深色的阳光和无垠的夏天，
+扑面而来。
+
+世界因为一场又一场雨交织在一起。
+你一下子就忘掉了。
+
+每一点都是一句话，
+闪光的，碎的，
+是瞬息。
+
+爱过你的人很多，
+写下的爱，
+就像玻璃上的雨水，
+抹不掉。
+
+雨水流到哪里，
+都是跨越时代，
+无关文化，
+长存的痛。
+
+就像山谷的回响，
+冰雪覆盖的还不下雨的过往。
+
+下雨了，
+水银侵蚀着雪。`},
+      { title: "毁", text:
+`灰尘，
+空气，
+晶体，
+幻觉，
+空气像火箭推进剂一样，
+针尖，
+树叶交替，
+草地上眩目的光。
+
+极致的悲伤，
+或者，
+更进一步，
+也只是真空。
+
+倒数，
+长而又长的古代史，
+倒流。
+一个季节的风，
+就可以吹走。
+
+雨水
+抹去温度和热，
+自此温热长存。
+
+熄灭不安分的恒星，
+热烈，
+
+繁星投影出彩色的影像，
+液晶的，
+有机发光二极管的，
+阴极射线管的，
+白色幕布的，
+屏幕，
+显示屏，
+
+意乱情迷的风暴，射线，
+情话，
+难以分辨，
+
+熔毁。
+
+神化的坠落，
+因为你脸上的浅红色，
+倒流。
+
+天体尽数熔毁，
+在你怀中冷却。
+我对你的爱，
+只比你抱住我的时候热一点。`},
+      { title: "光", text:
+`希望你不懂，
+可是，
+又怎么可能，
+失控，破碎
+超越了我们这个时代的主题
+就像下过一场雨之后还想去旅行一样
+
+你超越光速地带来错乱
+以及茫然无措，无言。`},
+      { title: "撩", text:
+`撩拨，刺激
+不如，
+温热的
+
+
+一整个夏天的橙色，
+填不满草地和山坡，
+
+吸收过充盈的热，
+
+无边无际的氢气，
+如今开在
+灼热，微笑的花上。
+
+自然，
+生生不息的琉璃，
+心碎，心痛，
+最让人难忘的脆性。
+
+熔毁，
+漫长的加热，
+从此到彼
+就像夏日午后的一束轻盈的光，
+过往的一场接一场暧昧的梦，
+到你脸上的色彩。
+
+从纯净的流水折射出变换的光，
+亲过你的裙裾。
+
+你不经意间说过的话，
+你稍微爱吃的东西。
+
+你爱的一切一切，
+自然每天献上几次，
+或只能回到，
+地球上最开始有温热。
+兔子吃草的时候，
+还要提防着恐龙。`},
+      { title: "你", text:
+`阳春白雪，
+空气构成了你。`},
+      { title: "瞬息", text:
+`雨幕的瞬息，
+雨幕暂时消去了，
+流动，心动，瞬息，电磁场的速度。
+留给融化。
+让位给柔和如蓝色的夜晚，热烈的融化。
+
+一开始，
+不断地，
+不断地，
+融化，
+
+灯光充盈的晚，
+暖色泡在微小的水洼上，
+
+流水只是碎片，
+月光，雨点穿过大半个地球，
+冒着泡泡的灼热盛夏，
+带来，带去，
+尽数流到还缺少引力的月球，
+堆砌的反射，
+月球上的生物无不侧目。
+
+就像苦闷漫长的痛一样，
+碎。`},
+      { title: "水星", text:
+`对你的一切一切，
+深夜轻盈的光，
+
+下午浮动的，
+热烈变幻的颜料，
+夏季灼热长存的橙色
+无声无息的青。
+
+湖上跳动着，
+沉痛的弦，
+
+内忧外患，
+就像，
+既没有人，也没有希望，
+结了一层霜的夜晚。
+
+就像一切一切，
+历史上，
+深刻，冰冷，
+重要的
+往前，
+往后，
+回环往复的悲剧。
+对你诉说过的。
+
+谁不沉溺于你的美艳，
+呼吸，
+轻声说的话，
+平静下来的心。
+
+过去，
+回来，
+再一次，
+太阳再一次，
+再一次，
+沉入最后的，
+最后的一个地球上仅此一个的夜晚。
+
+你们当中有一个人会出卖你，
+你的。
+
+千娇百媚的一次夏天，
+花像冰雪一样覆满了。
+
+毁灭，
+从行星到行星，
+融入宇宙微波背景的，
+我对你说的一字一句。
+
+太阳不断地，
+不断地落下，
+水星的一次合并。
+
+水星，太阳，地球，土星，现在只是，
+同一个名字。
+
+在你的怀中，
+有着冰河时代无边无际的冷
+却。`}
+    ]
+  },
+  {
+    name: "放射", file: "放射.md",
+    quote: "“世界依旧透明。”",
+    poems: [
+      { title: "她", text:
+`世界的一切一切，
+温情留给了你。
+
+春天，
+空无一人，
+只有雨的雪花屏。
+
+世界过于透明，
+你的一点情绪，
+扰乱了动物和絮状的心，
+人们紧张地看着春天的纱裙，
+远处只有纯白色。
+
+春天只想让你展开，
+窗上，玻璃上你的影子，
+裙子，白丝，
+一束白色的花，
+
+你偷偷地哭着，
+梨花带雨，
+全世界都知道。
+
+世界的一切混乱，
+只是你的一词一句。
+
+我不仅不懂，
+不了解，
+一无是处，
+阳光如酸涩的柠檬，
+空气像冰一样冻住。
+
+你伤感地说，雨还在下着，
+世界依旧透明。`},
+      { title: "人", text:
+`个体的可悲，也包括我，
+像白而没有光的，
+
+深，冷，拖着的，幕。
+渺小，而问题，像铬，熔化不断滴下的钨，
+空的停电走廊，轰鸣声，
+
+像桌上抹不去的水，雨水，
+幕后抽泣的渺小，
+
+最柔软的不再是她的，你的脸，
+傍晚粉色的丝绸和缠绕着路灯乳白色的雾，
+
+春雨湿润的吻和带着甜味的唇，
+她哭得泪眼朦胧时脸上跳动的曲线，
+现在都比不上——人。`},
+      { title: "轻", text:
+`爱着，
+脸上的轻蔑，
+
+沉默，
+不说话，
+就像滚烫的水，
+琥珀色的灯光躲进只有月光的夜幕，
+亲亲抱抱。
+
+可惜，
+温柔，
+以前的少之又少，
+现在，
+仅是温柔的一颗种子，
+冬天的釉面无边无际，你柔软如兔子的心的话语暖过的一丝空气，
+我们也只认为是过度的温柔，
+
+爱着，
+脸上的轻蔑，
+我因此倾心于你——
+
+有一天没一天的人，
+冻结出花的天气。
+滚烫的水浇到了冰上，雪上，
+冰花，雪花，
+冒着热气。
+
+无边无际，
+我对你的爱也是。`},
+      { title: "鲜", text:
+`她的眼睛，
+娇媚，
+是水的血液。
+
+她曲线柔和，
+海浪决绝沿着曲线，
+水的烟花，像眼泪一样闪着光，
+沉重的夜幕像一颗心，
+跳动一下，
+夜幕融在心上。
+
+一千千个妆容细致的奶油蛋糕，
+一层再一层涂抹，
+只是平淡的湖面。
+
+她是不服从命运的水，
+像春擦过每一束花和温暖的动物，
+留下跳动的血液，雨露，
+三倍的希望，或是乳白色的阳光。`},
+      { title: "低温", text:
+`她是由比滨结衣，
+团子。
+脸上的柔软，一时只能和她对视，
+眼睛的幼稚，低温，
+雪在停滞的空气中转了一千千圈，
+
+柔软，思念，
+气味，无处不在
+让人只是不断地感到心，
+像柠檬片在火炉中熔成光。
+暖色，香味，
+冬天亲吻着不凝结的水，
+
+有些东西比光更快，或许，
+也或许，
+在你身上可以见证到。
+
+思念着她的狡猾，决绝，一切一切，
+树叶乳白色的光点闪着，
+带着暖与香味的阳光，
+
+空气和整个世界为你停滞，
+就算有宽限，
+也只让纯白，一层一层暗淡。
+
+她走过一切的虚假，熄灭世界的心，
+抹去彩色，
+蓝白色的地表。
+冰上雪上，乳白色的光如今真的像牛乳。`},
+      { title: "钨", text:
+`白得彻底的季节，
+一片空白放射着暗淡的纯白，
+有尘与水雾，
+
+空，只是平淡的水面。
+冰，
+一束无机的花，
+夜间，晚上，不过是更平淡的空白，
+吞下了一片灯光，空气停留在琥珀色，
+淡黄色。
+
+吞下了无机的花，
+吞下脆弱冰冷的，
+心。
+
+手伸进这片空，
+白，
+深，热得就像流动的钨，
+或者她的热泪，
+
+浅的冷一些，
+像一颗心。`},
+      { title: "不在乎具体的人", text:
+`我喜欢的布拉格，
+在湖面上浮动，
+
+春天交织的冰，
+也只能，
+消解，
+
+艺术，
+性。
+
+轻，易，
+春风吹融的雪，
+一切现实的或是骑士的甲壳，
+
+只能被解开，
+一千千次，
+
+春风吹融的雪，
+轻，
+易，
+
+我们在一起，
+一千千次，
+你的手，
+
+轻，
+易，
+像春天不着痕迹，
+又留下了艺术，
+性。`},
+      { title: "暖", text:
+`水晶的夜晚，
+深紫，
+吞下光的一切，
+
+静谧到没有影子的一晚。
+像泪水不拘于季节，
+深深秋水的琥珀色，
+三下，一下，
+
+橙色的心跳溶于深，浅。
+
+一切温暖的动物体，
+早已种下，
+离子，分子，
+
+分和一切的离，
+分不清的感触，
+晚上不置一词心跳不已的离。
+
+分清温柔或温暖，
+一词一句的心动，
+在夜晚里
+
+微弱，
+无法下咽。`},
+      { title: "冰河时代的轻", text:
+`热烈，
+就像冰河时代无边无际的，
+
+白，
+
+或许见过你的人，
+都对你倾心，
+
+到这一刻，还是跳动不已，
+就像欲望，
+你留下了最轻的，
+心碎和心痛。`},
+      { title: "展开", text:
+`世界的一切一切，
+温情留给了你。
+
+春天，
+空无一人，
+只有雨的雪花屏。
+
+世界过于透明，
+你的一点情绪，
+扰乱了动物和絮状的心，
+人们紧张地看着春天的纱裙，
+远处只有纯白色。
+
+春天只想让你展开，
+窗上，玻璃上你的影子，
+裙子，白丝，
+一束白色的花，
+
+你偷偷地哭着，
+梨花带雨，
+全世界都知道。
+
+世界的一切混乱，
+只是你的一词一句。
+
+我不仅不懂，
+不了解，
+一无是处，
+阳光如酸涩的柠檬，
+空气像冰一样冻住。
+
+你伤感地说，雨还在下着，
+世界依旧透明。`}
+    ]
+  },
+  {
+    name: "春夏之交", file: "春夏之交.md",
+    quote: "“云淡风轻，像是初夏时节。”",
+    poems: [
+      { title: "春困", text:
+`灰绿色的树叶放射着春光，
+黯淡带着困意的光，
+
+是泥水的浅灰色，
+雨后清亮的河水的池底，
+雏鸟灰色的绒毛，
+
+贴着瓷砖的窗边上打转的光，
+水墨画一样的湿润路面。
+
+对春天作何要求，
+形单影只的春天，
+快要冻僵的虫子，
+
+只找到了，
+水墨画一样湿润的路面。
+天气忽冷忽热，
+你对我的态度也是。`},
+      { title: "纯色", text:
+`起雾的早晨，
+树叶带着一点点眼泪，
+远处只有纯白色。`},
+      { title: "风车", text:
+`六月，我是否会为你
+迷茫地徘徊，或是看着
+
+蓝色 琉璃 冰块 水晶一样的天空，
+应该会太热，一定会
+挥汗如雨，
+
+我能为你做什么，
+滚烫的空气，
+风车，
+火中取栗，
+
+以及不被人理解的热烈的，
+根本不知道是什么花的精神错乱的花语。`},
+      { title: "没有尾巴", text:
+`城市的夜景，郊外，
+长而又长的轨道
+
+灯光银色，
+夜景，夜幕，天上泛着亮光，
+底下漆黑一片，好像
+
+湖面，
+或者平静，新鲜，幸福，
+最难控制的是情绪，
+
+乱扑行人面的飞虫，
+又像一只没有尾巴的兔子，
+学名夏季，
+
+夏天，扑面而来的感觉，
+柔软，
+一时让人忘记，
+小之又小的生活。`},
+      { title: "暖", text:
+`九月十月的草地黄绿相间，
+天空灰暗，
+
+下午米色的光线，
+舞步轻盈。
+
+树叶，如秋月的色彩。
+外面很冷，她是我的暖气。`},
+      { title: "暖色带来的一点错乱", text:
+`淡薄的阳光和阴影交织，
+天空蓝得发白，
+
+绿色的草叶上化开的霜闪闪发光，
+空气只有一点冷。
+
+云淡风轻，像是初夏时节，
+——或是你的，一颦一笑。`},
+      { title: "琴", text:
+`雨，
+春天的雨水琴弦，
+
+雨的气息，
+花香，花蜜，
+
+比水晶还要晶莹，
+
+夜晚寂静，
+水洼像月光，湖面，
+
+脸上闪着晶莹的光。
+泪花。`},
+      { title: "思念", text:
+`秋夜，10月7日,
+暖黄色的灯光在夜幕和树影间闪着，
+
+路灯下的地板是柔和的淡黄色，
+秋日里的小黑狗嗅着地面，从人们的脚下穿过。
+
+话语声在空气里跳动，
+安静的夜晚，饮水机滴滴地响着。
+
+大家都穿厚了一些，因为17度的天气，还有小雨。
+我思念你。`},
+      { title: "晚上", text:
+`十年前的杏花，
+三年前的雨，
+一场大雨，
+暗淡的天空就像带着灰尘的蛛网，
+困意，
+
+闪光的春潮，轻轻地流动打转，
+湿过草丛，像芦荟果肉那样的青。
+雨水，葡萄的透光果肉，
+
+一切正常的生物都在啜饮着露水，
+只有一种庸俗可笑的，
+人的。`},
+      { title: "为什么是橙", text:
+`阳光橘色，
+橙多汁果肉的羽毛，
+可以是清晨的一束，
+
+微热下午柠檬汁，
+与橙色白炽灯，
+蓝绿玻璃一样的湖面，
+树叶浅色，
+
+夜晚温柔，
+微风沐浴，
+有时，怦然心动。
+
+暖融融，
+清冷，雪糕，
+冬季在霜白的风中想起过往小事，
+如今淡蓝的天空，
+轻盈得像冰，
+
+心一点一点的痛感，
+青春。
+现在明白了，
+你的笑，
+橙。`},
+      { title: "希望", text:
+`我已经深深地迷上了你，
+我不断在人群中寻找你的脸。
+
+她们的美，
+像花瓣滴入牛奶，
+曲线优美，色彩诱人。
+
+你的美，
+像雾中的花不能不带着泪水，
+春雨在夜里温柔地闪着光。
+
+你的脸，
+你看着雨点一圈又一圈
+你的浅红色脸颊，
+
+超越了艺术，超越了停留在广告层面的美，超越了现实的情欲，
+
+你默默地看着我，
+
+你白色的裙，
+缀有白色的小花，
+
+你轻轻地抱住我，
+温暖如春的希望。`},
+      { title: "小", text:
+`一场小雨，
+外面变成了阳春四月。`},
+      { title: "烟花", text:
+`今天是一年的开端，
+今晚有bilibili的跨年晚会。
+
+外面堵车，放烟花，烟花的声音沉闷，
+像是在瓶子里炸开。
+
+江汉路都是人，
+除了路灯就是一个个白点。
+空气里散发着烟花的味道，就像过年一样。
+
+熟悉的温度，熟悉的空气。
+离子，焰色反应，希望你也能看到。`},
+      { title: "制冷", text:
+`打了一下午的卡牌游戏，
+喜欢的人还是没有更新动态，
+
+收到的消息只有作业和通知，
+就算缩在被窝里，还是寒冷如冬。
+
+十二度制冷，
+小雨，
+风也是无限大。`}
+    ]
+  },
+  {
+    name: "春天和雨", file: "春天和雨.md",
+    quote: "“你是夏天清凉的阳光。”",
+    poems: [
+      { title: "蓝紫色", text:
+`树叶的淡金色，阳光。
+树，树的影，绿草如茵，中世纪的静谧。
+
+夏日的馨香，淡薄的空气和蓝紫色的天空，
+薰衣草。
+麻雀，斑鸠在寻找你，时飞时停。
+
+树影摇曳，
+
+你是夏天清凉的阳光，
+夏天没有消融的积雪，
+晚上的暮色，
+
+昨天前天的风。`},
+      { title: "青春", text:
+`只要一瞬，
+我就可以把结论告诉你。`},
+      { title: "牵着白线", text:
+`雨水牵着白线，
+庸俗无聊，奶油蛋糕的妆。
+
+爱着，脸上的暖色，
+坚决，
+或是
+轻，易。
+
+爱着无机的花，
+因为它
+流光溢彩。
+
+你，
+橱窗，
+黯然失色。`},
+      { title: "温柔", text:
+`像一件艺术品
+可见，可感
+随时
+转过脸来，
+
+让人想到
+总是躲在树枝后面，
+阔别已久的月亮。`}
+    ]
+  },
+  {
+    name: "素世", file: "素世.md",
+    quote: "“爱，只是瞬息。”",
+    poems: [
+      { title: "爱", text:
+`我爱她身上革命者的气质，
+她的坚定，
+她又白又嫩的侧脸。
+
+秋天的空气是一片空白，
+闪光的水面浮动着国家的命运。
+
+命运。
+从最初的到最后的，
+
+从她的呼吸，
+到光在植物里的呼吸。
+
+痛恨，厌弃，遗忘，
+为什么都在你身上。
+为什么我们要承受这些。
+为什么充满痛苦，愚昧和奴役的时代。`},
+      { title: "我爱你", text:
+`我想要的，
+只是雨水的疏密，
+水雾，
+玻璃上的白雾，
+生活又浅又薄，
+溶入像冰块一样的夜空，
+
+淅淅沥沥的小雨，
+漫长的，
+命运。
+
+我爱你，
+我需要的只是瞬息，
+下午娇媚而熟悉的温度，
+你温暖的柔软的嘴唇，
+
+漂亮娇羞的眼睛，
+无限的温情。
+
+又浅又薄的争执，
+每一个都是，
+永恒的话题。
+
+爱，
+只是瞬息。
+亲吻，拥抱，爱你的一切一切的话语，
+无一例外，
+我已经说过。`}
+    ]
+  },
+  {
+    name: "附件", file: "附件.md",
+    quote: "“玻璃和丝绸的雨燃烧着。”",
+    poems: [
+      { title: "暖", text:
+`历史，
+留给我们的，
+只有无尽的悲哀。
+
+未来的，
+也还是无尽的悲哀。
+在这之间，
+迷幻和幻觉。
+
+秋天无边无际的白，
+和熟悉的温度。
+在一片悲哀中。`},
+      { title: "雪", text:
+`你的声音如此治愈，
+暖的，热的，
+发光的，
+不是火，什么都不是。
+爱意在你身上短暂地停留，
+稀松平常的冬天和深不见底的生活。
+血红色的夜晚和放射性的水，
+
+树叶一次漫长的摇动，
+历史短暂浅薄地吐出泡泡
+欲望一样透明漂亮的水。
+
+黯淡的雪，
+深红色的，在冬天橙色的天上坠落。
+你的小裙子带着粉色和厚重的温柔，
+
+被融化过的动物，受过感化的水，
+切开深红色的光，只有化掉的过去。
+像灼热的水银，
+烧得冰冷的心，
+手心。
+
+无边无际的空白，
+灼热迷幻的秋天，降温过后，
+粉红色的湖水，像电磁一样清澈。
+
+夜晚吞没了橘黄色的灯光下着紫红色的雨水，
+天气时好时坏，冷却到最后，是冰冷的血。
+
+娇媚的雨水轻轻地吻着她的脸，
+时间融化了，化作她粉红的脸，
+水滴悬停在温暖的冰上，
+她千娇百媚的神情流动着，
+
+漂亮的，温暖的，
+玻璃和丝绸的雨燃烧着。
+
+她的温柔和娇声细语，
+历史上还没有过。`},
+      { title: "吻", text:
+`爱，
+投下影子，
+夜晚的一场雨，
+轻轻覆盖了，
+迷幻。
+
+橘红色，雪白色的花，
+你的。
+
+爱，
+就像兔子，
+柔软，
+热，
+鲜活，
+
+可是又完全不像，
+爱。
+
+太阳放射的，
+橙子一样白，
+橘子一样热烈，
+光线。
+
+秋天的温柔，
+扩散在雨滴迷恋的空气里。
+
+温度折射出鲜活的泪水，
+最漂亮最轻盈的冰冷，
+她的微笑如此神秘，
+
+寂静，
+她轻轻抱过，
+白嫩的手写下，
+写下，
+爱你，
+除此之外，
+只是爱。
+
+在起雾的窗，
+折射出心的水面，
+
+寂静漂亮温暖的自然。
+
+她无限的娇媚融在，
+看你的眼神。
+
+她说不清和你的关系，
+吻着你的裙。`}
+    ]
+  },
+  {
+    name: "温柔", file: "温柔.md",
+    quote: "“只留下，你和漂亮娇小的银河。”",
+    poems: [
+      { title: "不如", text:
+`我被击中了
+我被融化了，
+我知道的一切
+
+我的意见。
+不如你纯白的灵气。`},
+      { title: "空气", text:
+`虚无。
+灯光反射在地上。
+灰尘颤动起来，晶体的声音，
+
+痛苦和等待的长久，
+鸟儿翻动着春天夜里的落叶和冰冷。`},
+      { title: "鸟", text:
+`焰火，
+鸟啼声或玻璃的语言，
+离子的一颗心，
+
+黯淡的玻璃，
+
+希望是你的时节，
+夜幕吞没了近处远处，
+做出选择。`},
+      { title: "灵气", text:
+`善良放弃了你，
+温柔背叛了你，
+迷失在烟雨连绵的中国，
+眼泪，
+碎玻璃的眼泪，
+古人，历史从未见过的纯净的
+眼泪。
+太阳对水星说过，
+爱你的人深切地痛着写过，
+不断地，不断地在
+地上重演，重复。
+
+春天只是你发卡上的花，
+秋天则什么都不是，
+从你白嫩的眼角，
+到柔美的曲线，
+自然界还造不出来。
+
+九州万千灵气，
+是你纯净温暖的精神。
+往前，往后，
+历史上都不会有。
+就算如此，
+我已经写过。`},
+      { title: "晚安", text:
+`我困了，
+
+孤独的诗越写越多，
+等着融化，
+等着你温暖柔软的嘴唇。
+
+抱着我，
+寂静温暖。
+
+漂亮，
+轻盈，
+忧伤的你。
+
+抱着我睡。`},
+      { title: "浅", text:
+`微弱的，
+最后最后的冰冷，
+雨雾带来了，
+夜晚。
+
+带来了，
+你娇气的脸，
+浅红色的温情。
+
+时代。
+记忆越来越浅，
+对你的爱越来越深，
+温热的眼泪，
+雨雾是果冻一样的绸带，
+甜味断裂。
+
+只留下，
+你和漂亮娇小的银河，
+不置一词的长久，
+相对静止。`}
+    ]
+  }
+];
+
+/* ================= 派生字段 ================= */
+collections.forEach(c => {
+  c.count = c.poems.length;
+  c.poems.forEach(p => {
+    p.lines = p.text.split(/\n\s*\n/).map(s => s.trim()).filter(Boolean);
+    p.excerpt = p.lines.slice(0, 2).join("\n");
+    p.collection = c.name;
+    p.file = c.file;
+  });
+});
+const allPoems = collections.flatMap(c => c.poems);
+const totalPoems = allPoems.length;
+
+/* ================= 元素 ================= */
+const collectionGrid  = document.getElementById("collectionGrid");
+const poemGrid        = document.getElementById("poemGrid");
+const searchInput     = document.getElementById("searchInput");
+const resultInfo      = document.getElementById("resultInfo");
+const poemHeading     = document.getElementById("poemHeading");
+const readingPage     = document.getElementById("readingPage");
+const readerBack      = document.getElementById("readerBack");
+const featuredCard    = document.getElementById("featuredCard");
+const featuredContent = document.getElementById("featuredContent");
+const featuredTitle   = document.getElementById("featuredTitle");
+const featuredQuote   = document.getElementById("featuredQuote");
+const featuredDots    = document.getElementById("featuredDots");
+
+/* ================= 状态 ================= */
+const ALL = "全部";
+const DEFAULT_COLLECTION = "她";
+let currentCollection = DEFAULT_COLLECTION;
+let filtered = [];
+let currentPoem = null;
+let lastFocused = null;
+let featuredIndex = 0;
+let featuredTimer = null;
+
+/* ================= 工具 ================= */
+const escapeHtml = s => String(s).replace(/[&<>"']/g, m => (
+  { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[m]
+));
+
+/* ================= Featured 轮播 ================= */
+function renderFeaturedDots(){
+  featuredDots.innerHTML = collections.map((c, i) => `
+    <button class="featured-dot${i === featuredIndex ? " active" : ""}"
+            type="button"
+            data-idx="${i}"
+            aria-label="《${escapeHtml(c.name)}》"></button>
+  `).join("");
+}
+
+function setFeatured(idx, animate = true){
+  featuredIndex = (idx + collections.length) % collections.length;
+  const item = collections[featuredIndex];
+
+  featuredDots.querySelectorAll(".featured-dot").forEach((dot, i) => {
+    dot.classList.toggle("active", i === featuredIndex);
+  });
+
+  if (!animate){
+    featuredTitle.textContent = `《${item.name}》`;
+    featuredQuote.textContent = item.quote;
+    return;
+  }
+
+  featuredContent.classList.add("switching");
+  featuredQuote.classList.add("switching");
+  setTimeout(() => {
+    featuredTitle.textContent = `《${item.name}》`;
+    featuredQuote.textContent = item.quote;
+    featuredContent.classList.remove("switching");
+    featuredQuote.classList.remove("switching");
+  }, 190);
+}
+
+function startFeaturedLoop(){
+  stopFeaturedLoop();
+  featuredTimer = setInterval(() => {
+    setFeatured(featuredIndex + 1, true);
+  }, 4500);
+}
+
+function stopFeaturedLoop(){
+  if (featuredTimer){
+    clearInterval(featuredTimer);
+    featuredTimer = null;
+  }
+}
+
+featuredDots.addEventListener("click", e => {
+  const dot = e.target.closest(".featured-dot");
+  if (!dot) return;
+  setFeatured(Number(dot.dataset.idx), true);
+  startFeaturedLoop();
+});
+
+featuredCard.addEventListener("mouseenter", stopFeaturedLoop);
+featuredCard.addEventListener("mouseleave", startFeaturedLoop);
+
+/* ================= 渲染：诗集筛选 ================= */
+function renderCollections(){
+  const chips = [
+    `<button class="collection" data-name="${ALL}" type="button">
+       <span class="collection-name">全部</span>
+       <span class="collection-count">${totalPoems}</span>
+     </button>`,
+    ...collections.map(c => `
+      <button class="collection" data-name="${escapeHtml(c.name)}" type="button">
+        <span class="collection-name">《${escapeHtml(c.name)}》</span>
+        <span class="collection-count">${c.count}</span>
+      </button>`)
+  ];
+  collectionGrid.innerHTML = chips.join("");
+}
+
+/* ================= 渲染：诗篇列表 ================= */
+function renderPoems(){
+  const q = searchInput.value.trim().toLowerCase();
+  filtered = allPoems.filter(p => {
+    const okCollection = currentCollection === ALL || p.collection === currentCollection;
+    if (!okCollection) return false;
+    if (!q) return true;
+    return (p.title + " " + p.text + " " + p.collection).toLowerCase().includes(q);
+  });
+
+  resultInfo.textContent = `${filtered.length} 首${q ? " · 已筛选" : ""}`;
+
+  if (!filtered.length){
+    poemGrid.innerHTML = `<div class="empty">没有找到对应的诗篇。</div>`;
+    return;
+  }
+
+  poemGrid.innerHTML = filtered.map((p, i) => `
+    <button class="poem-card" type="button" data-index="${i}">
+      <span class="poem-head">
+        <span class="poem-title">${escapeHtml(p.title)}</span>
+        <span class="poem-collection">《${escapeHtml(p.collection)}》</span>
+      </span>
+      <span class="poem-excerpt">${escapeHtml(p.excerpt)}</span>
+    </button>`).join("");
+}
+
+/* ================= 选择诗集 ================= */
+function selectCollection(name, opts = {}){
+  currentCollection = name;
+
+  collectionGrid.querySelectorAll(".collection").forEach(el => {
+    el.classList.toggle("active", el.dataset.name === name);
+  });
+
+  poemHeading.textContent = name === ALL ? "全部诗篇" : `《${name}》`;
+  renderPoems();
+
+  if (opts.scroll){
+    document.getElementById("poems").scrollIntoView({ behavior:"smooth", block:"start" });
+  }
+}
+
+collectionGrid.addEventListener("click", e => {
+  const btn = e.target.closest(".collection");
+  if (!btn) return;
+  selectCollection(btn.dataset.name, { scroll:true });
+});
+
+document.getElementById("featuredBtn").addEventListener("click", () => {
+  const activeBook = collections[featuredIndex];
+  selectCollection(activeBook ? activeBook.name : DEFAULT_COLLECTION, { scroll:true });
+});
+
+poemGrid.addEventListener("click", e => {
+  const card = e.target.closest(".poem-card");
+  if (!card) return;
+  openReader(Number(card.dataset.index), card);
+});
+
+/* ================= 阅读页 ================= */
+function openReader(index, sourceEl){
+  const p = filtered[index];
+  if (!p) return;
+
+  currentPoem = index;
+  lastFocused = sourceEl || lastFocused;
+
+  document.getElementById("readerCollection").textContent = `《${p.collection}》`;
+  document.getElementById("readerTitle").textContent = p.title;
+  document.getElementById("readerPoem").textContent = p.text;
+
+  readingPage.classList.add("show");
+  readingPage.setAttribute("aria-hidden", "false");
+  document.body.classList.add("reader-open");
+  readingPage.scrollTop = 0;
+
+  if (!readingPage.contains(document.activeElement)) {
+    readerBack.focus({ preventScroll:true });
+  }
+}
+
+function closeReader(){
+  readingPage.classList.remove("show");
+  readingPage.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("reader-open");
+  currentPoem = null;
+  if (lastFocused && document.contains(lastFocused)) {
+    lastFocused.focus({ preventScroll:true });
+  }
+}
+
+function changePoem(delta){
+  if (filtered.length < 2) return;
+  const next = (currentPoem + delta + filtered.length) % filtered.length;
+  openReader(next, lastFocused);
+}
+
+readerBack.addEventListener("click", closeReader);
+
+document.addEventListener("keydown", e => {
+  if (!readingPage.classList.contains("show")) return;
+  if (e.key === "Escape"){
+    e.preventDefault();
+    closeReader();
+  } else if (e.key === "ArrowRight"){
+    e.preventDefault();
+    changePoem(1);
+  } else if (e.key === "ArrowLeft"){
+    e.preventDefault();
+    changePoem(-1);
+  }
+});
+
+let searchTimer = null;
+searchInput.addEventListener("input", () => {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(renderPoems, 120);
+});
+
+/* ================= 初始化 ================= */
+renderFeaturedDots();
+setFeatured(0, false);
+startFeaturedLoop();
+
+renderCollections();
+selectCollection(DEFAULT_COLLECTION);
+</script>
+</body>
+</html>
